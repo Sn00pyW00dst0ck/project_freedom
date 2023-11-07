@@ -32,7 +32,7 @@ jobs:
       
     - name: Run PyLint
       run: |
-        pylint $(git ls-files '*.py')
+        pylint --fail-under=7.0 $(git ls-files '*.py')
 
     - name: Run Unit Tests & Generate Coverage Report
       run: |
