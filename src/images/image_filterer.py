@@ -35,26 +35,24 @@ class Image_Filterer:
     
     def __apply_low_pass_filter(self, image_matrix, sigma):
         frequency_domain = fftshift(fft2(image_matrix))
-        filtered_frequencies = frequency_domain * gaussian_filter(image_matrix.shape[0], image_matrix.shape[1], sigma)
+        filtered_frequencies = frequency_domain * self.__get_gaussian_filter(image_matrix.shape[0], image_matrix.shape[1], sigma[0])
         return ifft2(ifftshift(filtered_frequencies))
     
     def __apply_high_pass_filter(self, image_matrix, sigma):
         frequency_domain = fftshift(fft2(image_matrix))
         # High frequency filter is same as 1 - low frequency filter
-        filtered_frequencies = frequency_domain * (1 - self.__get_gaussian_filter(image_matrix.shape[0], image_matrix.shape[1], sigma))
+        filtered_frequencies = frequency_domain * (1 - self.__get_gaussian_filter(image_matrix.shape[0], image_matrix.shape[1], sigma[0]))
         return ifft2(ifftshift(filtered_frequencies))
 
     # Functions to generate filters (for internal use only)
 
-    @staticmethod
     def __get_average_filter(self, num_rows, num_cols):
         # Get a filter used for averaging
         filter_array = np.ones((num_rows, num_cols))
         filter_array = filter_array / filter_array.size
         return filter_array
     
-    @staticmethod
-    def __get_gausian_filter(self, num_rows, num_cols, sigma):
+    def __get_gaussian_filter(self, num_rows, num_cols, sigma):
         # These are used to center the filter
         center_row = num_rows // 2
         center_col = num_cols // 2
