@@ -4,23 +4,53 @@ import numpy as np
 import imageio.v3 as iio
 
 from images.image_hybridizer import Image_Hybridizer
+from audio.audio_processor import Audio_Processor
+from audio.audio_hybridizer import Audio_Hybridizer
 
 if __name__ == "__main__":
     # Grayscale works.
-    # TODO: Let's try RGB.
+    # RGB kinda works.
     # TODO: Let's try for Video.
     # TODO: Let's try for Music.
     # TODO: Let's write a really good explanation document.
 
-    Ethan_Hunt = iio.imread("Ethan_Hunt.jpg")
-    James_Bond = iio.imread("James_Bond.jpg")
-    Ethan_Hunt = Ethan_Hunt[:, :, 0]
-    James_Bond = James_Bond[:, :, 0]
+    Ethan_Hunt = iio.imread("rgb_monroe.png")
+    James_Bond = iio.imread("rgb_einstein.png")
+
+    # Grab the channels of RGB Image
+    Ethan_R = Ethan_Hunt[:, :, 0]
+    Ethan_G = Ethan_Hunt[:, :, 1]
+    Ethan_B = Ethan_Hunt[:, :, 2]
+
+    James_R = James_Bond[:, :, 0]
+    James_G = James_Bond[:, :, 1]
+    James_B = James_Bond[:, :, 2]
 
     hybridizer = Image_Hybridizer()
 
-    hybrid_image = hybridizer.hybridize_images(James_Bond, Ethan_Hunt, 29, 14)
-    hybrid_image = np.clip(np.abs(hybrid_image), 0, 255)
+    hybrid_r = hybridizer.hybridize_images(James_R, Ethan_R, 23, 14)
+    hybrid_g = hybridizer.hybridize_images(James_G, Ethan_G, 23, 14)
+    hybrid_b = hybridizer.hybridize_images(James_B, Ethan_B, 23, 14)
+    hybrid_image = np.dstack((hybrid_r, hybrid_g, hybrid_b))
+
     iio.imwrite("combined.png", hybrid_image.astype(np.uint8))
 
-    print("Done!")
+    print("Done modifying image!")
+
+    processor1 = Audio_Processor()
+    processor1.load_from_file("space_oddity.wav")
+    processor2 = Audio_Processor()
+    processor2.load_from_file("lewis_balls.wav")
+
+    processor1.pad_to_length(processor2.audio_data.shape[0])
+
+    hybridizer = Audio_Hybridizer()
+    merged = hybridizer.hybridize_audio(processor1.audio_data, processor2.audio_data, 0.15)
+    
+    processor3 = Audio_Processor()
+    processor3.load_from_data(merged, processor1.sample_rate)
+    processor3.save_to_file("hybrid.wav")
+
+    print("Done modifying audio!")
+
+

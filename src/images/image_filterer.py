@@ -2,6 +2,8 @@ import numpy as np
 from numpy.fft import fft2, ifft2, fftshift, ifftshift
 from scipy import ndimage
 
+# TODO: Add support for RGB
+
 class Image_Filterer:
 
     def __init__(self):
