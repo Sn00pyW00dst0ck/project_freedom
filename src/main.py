@@ -42,13 +42,20 @@ if __name__ == "__main__":
     processor2 = Audio_Processor()
     processor2.load_from_file("lewis_balls.wav")
 
-    processor1.pad_to_length(processor2.audio_data.shape[0])
+    processor1.low_pass_filter(750)
+    processor2.high_pass_filter(750)
+
+    # processor1.normalize_audio()
+    # processor1.save_to_file("low_pass_oddity.wav")
+    # processor2.normalize_audio()
+    # processor2.save_to_file("high_pass_lewis.wav")
 
     hybridizer = Audio_Hybridizer()
-    merged = hybridizer.hybridize_audio(processor1.audio_data, processor2.audio_data, 0.15)
-    
+    merged = hybridizer.hybridize_audio(processor1.audio_data, processor2.audio_data, 0.5)
+
     processor3 = Audio_Processor()
     processor3.load_from_data(merged, processor1.sample_rate)
+    processor3.normalize_audio()
     processor3.save_to_file("hybrid.wav")
 
     print("Done modifying audio!")

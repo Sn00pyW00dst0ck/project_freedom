@@ -11,8 +11,8 @@ class Audio_Processor:
     basic operations on audio.
     """
 
-    self.audio_data = None
-    self.sample_rate = None
+    audio_data = None
+    sample_rate = None
 
     def __init__(self):
         pass
@@ -71,21 +71,37 @@ class Audio_Processor:
         else:
             self.audio_data = self.audio_data[:target_length]
     
+    def low_pass_filter(self, cutoff_frequency):
+        # Apply FFT to the audio signal
+        fft_audio = fft(self.audio_data)
 
+        # Get the frequencies corresponding to each point in the FFT
+        frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
 
-    def filter_audio(self, low_cutoff, high_cutoff):
-        # Apply FFT!
-        frequency_domain = fft(self.audio_data)
+        # Create a mask for frequencies above the cutoff
+        filter_mask = np.abs(frequencies) <= cutoff_frequency
 
-        # Filter out selected frequencies!
-        frequencies = np.fft.fftfreq(len(frequency_domain), d=1.0/self.sample_rate)
-        low_mask = np.abs(frequencies) >= low_cutoff
-        high_mask = np.abs(frequencies) <= high_cutoff
-        mask = np.logical_and(low_mask, high_mask)
-        frequency_domain = frequency_domain * mask
+        # Apply the mask to the FFT
+        filtered_fft = fft_audio * filter_mask
 
-        # Undo FFT!
-        self.audio_data = ifft(frequency_domain).real
+        # Apply Inverse FFT to obtain the filtered audio signal
+        self.audio_data = ifft(filtered_fft).real
+
+    def high_pass_filter(self, cutoff_frequency):
+        # Apply FFT to the audio signal
+        fft_audio = fft(self.audio_data)
+
+        # Get the frequencies corresponding to each point in the FFT
+        frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+
+        # Create a mask for frequencies above the cutoff
+        filter_mask = np.abs(frequencies) >= cutoff_frequency
+
+        # Apply the mask to the FFT
+        filtered_fft = fft_audio * filter_mask
+
+        # Apply Inverse FFT to obtain the filtered audio signal
+        self.audio_data = ifft(filtered_fft).real
 
     def normalize_audio(self):
         self.audio_data = np.array((np.abs(self.audio_data) / np.max(np.abs(self.audio_data))) * 32767, np.int16)
