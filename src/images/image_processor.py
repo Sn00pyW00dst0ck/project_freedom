@@ -1,12 +1,11 @@
 import numpy as np
 from numpy.fft import fft2, ifft2, fftshift, ifftshift
-from scipy import ndimage
 
 import imageio.v3 as iio
-import pygame
-from pygame.locals import QUIT
 
-
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
 class Image_Processor:
     """
@@ -41,27 +40,40 @@ class Image_Processor:
         """
         self.image_data = image_data
     
-    def display_image(self):
+    def plot_image(self):
         """
-        Displays the loaded image data in a pygame window!
+        Displays the loaded image data in matplotlib!
         The image data can be RGB or grayscale.
         """
-        pygame.init()
+        plt.figure()
+        cmap = 'gray' if self.image_data.ndim == 2 else None
+        plt.imshow((self.image_data).astype(np.uint8), cmap = cmap)
+        plt.show()
 
-        # The transpose is needed due to coordinate differences in pygame and numpy
-        image_surface = pygame.surfarray.make_surface(np.transpose(self.image_data, axes=(1,0,2)))
-        screen = pygame.display.set_mode((self.image_data.shape[1], self.image_data.shape[0]))
+    def plot_fourier_transform(self):
+        if self.image_data.ndim == 2:
+            frequency_domain = fftshift(np.abs(fft2(self.image_data)))
+            plt.figure()
+            plt.imshow(np.log(1+frequency_domain).astype(np.uint8), cmap='gray')
+            plt.colorbar(label='Log Magnitude')
+            plt.title("Image Fourier Transform", fontsize=16)
+            plt.show()
 
-        # Constantly need to check if user has closed the window or not!
-        while True:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    return
-
-            # Display the image on the screen
-            screen.blit(image_surface, (0, 0))
-            pygame.display.flip()
+        if self.image_data.ndim == 3:
+            fig, axs = plt.subplots(1, self.image_data.shape[2])
+            # Build 3 subplots for the different RGB
+            for channel in range(self.image_data.shape[2]):
+                frequency_domain = fftshift(np.abs(fft2(self.image_data[:,:,channel])))
+                im = axs[channel].imshow(np.log(1+frequency_domain), cmap='gray')
+                axs[channel].title.set_text("Channel " + str(channel))
+            
+            fig.suptitle("Image Fourier Transform", fontsize=16)
+            # Add colorbar and set spacing properly
+            plt.tight_layout() 
+            fig.subplots_adjust(right=0.8)
+            cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+            fig.colorbar(im, cax=cbar_ax)
+            plt.show()
 
     def save_to_file(self, file_path):
         """
@@ -73,6 +85,15 @@ class Image_Processor:
         """
         iio.imwrite(file_path, self.image_data.astype(np.uint8))
 
+    def save_fourier_transform_to_file(self, file_path):
+        """
+        Save the fourier transform of the loaded data as a file.
+
+        Args:
+            file_path (string)
+                The file to save the image to.
+        """
+        iio.imwrite(file_path, self.image_data.astype(np.uint8))
 
     def custom_hybridization(self, other, sigma_high, sigma_low):
         """
@@ -93,8 +114,6 @@ class Image_Processor:
         highPassed = self.apply_filter('high_pass', sigma_high)
         lowPassed = other.apply_filter('low_pass', sigma_low)
         self.image_data = np.clip(np.abs(highPassed + lowPassed), 0, 255)
-
-
 
     def apply_filter(self, method, *params):
         """

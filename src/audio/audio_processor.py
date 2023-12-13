@@ -3,8 +3,11 @@ import pygame
 import numpy as np
 from scipy.fft import fft, ifft
 from scipy.io.wavfile import read, write
-from scipy.signal import resample, convolve, fftconvolve
+from scipy.signal import resample, convolve
 
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('TkAgg')
 
 class Audio_Processor:
     """
@@ -59,6 +62,70 @@ class Audio_Processor:
 
         pygame.mixer.quit()
         os.remove("temp-playing.wav")
+
+    def plot_waveform(self):
+        """
+        Plot the waveform for the loaded audio data.
+        """
+        time = np.arange(0, len(self.audio_data)) / self.sample_rate
+        
+        plt.figure(figsize=(10, 4))
+        plt.plot(time, self.audio_data, lw=0.5, color='blue')
+        plt.title('Audio Waveform')
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('Amplitude')
+        plt.show()
+    
+    def plot_frequencies(self):
+        """
+        Plot the frequency data for the loaded audio data.
+        """
+        frequencies = np.fft.fftfreq(len(self.audio_data), 1/self.sample_rate)
+        magnitude_spectrum = np.abs(np.fft.fft(self.audio_data))
+
+        plt.figure(figsize=(10, 4))
+        plt.plot(frequencies, magnitude_spectrum, lw=0.5, color='blue')
+        plt.title('Fourier Transform of Audio')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Magnitude')
+        plt.show()
+
+    def save_waveform_to_file(self, file_path):
+        """
+        Save a plot of the frequencies of the loaded audio data
+        to a file without showing the interactive plot.
+
+        Args:
+            file_path (string):
+                The file to save the plot to.
+        """
+        time = np.arange(0, len(self.audio_data)) / self.sample_rate
+        
+        plt.figure(figsize=(10, 4))
+        plt.plot(time, self.audio_data, lw=0.5, color='blue')
+        plt.title('Audio Waveform')
+        plt.xlabel('Time (seconds)')
+        plt.ylabel('Amplitude')
+        plt.savefig(file_path)
+
+    def save_frequencies_to_file(self, file_path):
+        """
+        Save a plot of the frequencies of the loaded audio data
+        to a file without showing the interactive plot.
+
+        Args:
+            file_path (string):
+                The file to save the plot to.
+        """
+        frequencies = np.fft.fftfreq(len(self.audio_data), 1/self.sample_rate)
+        magnitude_spectrum = np.abs(np.fft.fft(self.audio_data))
+
+        plt.figure(figsize=(10, 4))
+        plt.plot(frequencies, magnitude_spectrum, lw=0.5, color='blue')
+        plt.title('Fourier Transform of Audio')
+        plt.xlabel('Frequency (Hz)')
+        plt.ylabel('Magnitude')
+        plt.savefig(file_path)
 
     def save_to_file(self, file_path):
         """
