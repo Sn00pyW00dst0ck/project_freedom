@@ -20,8 +20,9 @@ if __name__ == "__main__":
     # TODO: Let's write a really good explanation document.
     image_file_processor.load_from_file(IMAGE_FILE_BASE + "einstein.png")
     image_file_processor.plot_image()
-    # image_file_processor.image_data = image_file_processor.image_data[:,:,0]
+    image_file_processor.image_data = image_file_processor.image_data[:,:,0]
     image_file_processor.plot_fourier_transform()
+    image_file_processor.save_fourier_transform_to_file(IMAGE_FILE_BASE + "fourier.png")
 
     image_file_processor.load_from_file(IMAGE_FILE_BASE + "rgb_einstein.png")
     image_file_processor.plot_image()
