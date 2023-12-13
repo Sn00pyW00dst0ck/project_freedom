@@ -1,0 +1,15 @@
+# LaTeX build workflow, to ensure the PDF will build on any device.
+# Based on the marketplace action found here: https://github.com/marketplace/actions/github-action-for-latex
+name: Build LaTeX document
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+      
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ./report/executive_summary.tex
