@@ -31,7 +31,11 @@ class Audio_Processor:
             file_path (string):
                 The path from which to load the audio data!
         """
-        self.sample_rate, self.audio_data = read(file_path)
+        try:
+            print(file_path)
+            self.sample_rate, self.audio_data = read(file_path)
+        except Exception as e:
+            print(f"Error loading audio from {file_path}: {e}")
     
     def load_from_data(self, audio_data, sample_rate):
         """
@@ -166,18 +170,26 @@ class Audio_Processor:
             cutoff_frequency (int): 
                 The frequency at which to apply the filter.
         """
-        for channel in range(self.audio_data.shape[1]):
-            # Apply FFT to the audio signal
-            fft_audio = fft(self.audio_data[:, channel])
-
+        if self.audio_data.ndim == 1:
+            fft_audio = fft(self.audio_data)
             # Get the frequencies corresponding to each point in the FFT
             frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
             # Create a mask for frequencies above the cutoff
             filter_mask = np.abs(frequencies) <= cutoff_frequency
-
             # Apply the mask to the FFT
             filtered_fft = fft_audio * filter_mask
-
+            self.audio_data = ifft(filtered_fft).real
+            return
+        
+        for channel in range(self.audio_data.shape[1]):
+            # Apply FFT to the audio signal
+            fft_audio = fft(self.audio_data[:, channel])
+            # Get the frequencies corresponding to each point in the FFT
+            frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+            # Create a mask for frequencies above the cutoff
+            filter_mask = np.abs(frequencies) <= cutoff_frequency
+            # Apply the mask to the FFT
+            filtered_fft = fft_audio * filter_mask
             # Apply Inverse FFT to obtain the filtered audio signal
             self.audio_data[:, channel] = ifft(filtered_fft).real
 
@@ -190,6 +202,17 @@ class Audio_Processor:
             cutoff_frequency (int): 
                 The frequency at which to apply the filter.
         """
+        if self.audio_data.ndim == 1:
+            fft_audio = fft(self.audio_data)
+            # Get the frequencies corresponding to each point in the FFT
+            frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+            # Create a mask for frequencies above the cutoff
+            filter_mask = np.abs(frequencies) >= cutoff_frequency
+            # Apply the mask to the FFT
+            filtered_fft = fft_audio * filter_mask
+            self.audio_data = ifft(filtered_fft).real
+            return
+        
         for channel in range(self.audio_data.shape[1]):
             # Apply FFT to the audio signal
             fft_audio = fft(self.audio_data)
