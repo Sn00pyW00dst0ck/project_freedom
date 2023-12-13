@@ -134,8 +134,13 @@ class Image_Processor:
                 for the low frequency image.
             
             sigma_high (float):
+                The sigma of the gaussian distribution for the high pass
+                filter. A smaller value will emphasize the high-frequency 
+                components more, resulting in sharper lines and edges.
 
             sigma_low (float):
+                The sigma of the gaussian distribution for the low pass 
+                filter. A smaller value will result in a more blurred image.
 
         """
         highPassed = self.apply_filter('high_pass', sigma_high)
