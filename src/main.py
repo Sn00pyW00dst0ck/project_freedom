@@ -1,7 +1,5 @@
 """Main Executable Program File"""
 
-import numpy as np
-
 from images.image_processor import Image_Processor
 from audio.audio_processor import Audio_Processor
 
