@@ -1,7 +1,10 @@
+import os
+import pygame
 import numpy as np
 from scipy.fft import fft, ifft
 from scipy.io.wavfile import read, write
-import sounddevice as sd
+from scipy.signal import resample, convolve, fftconvolve
+
 
 class Audio_Processor:
     """
@@ -41,6 +44,22 @@ class Audio_Processor:
         self.audio_data = audio_data
         self.sample_rate = sample_rate
 
+    def play_data(self):
+        """
+        Plays the loaded audio data using pygame and a temporary file.
+        """
+        self.save_to_file("temp-playing.wav")
+        pygame.mixer.init()
+        pygame.mixer.music.load("temp-playing.wav")
+        pygame.mixer.music.play()
+
+        # Wait for the music to finish playing
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+
+        pygame.mixer.quit()
+        os.remove("temp-playing.wav")
+
     def save_to_file(self, file_path):
         """
         Saves the loaded audio to a file.
@@ -72,6 +91,14 @@ class Audio_Processor:
             self.audio_data = self.audio_data[:target_length]
     
     def low_pass_filter(self, cutoff_frequency):
+        """
+        Apply a low pass filter to the loaded audio
+        effectively isolating the low frequencies only.
+
+        Args:
+            cutoff_frequency (int): 
+                The frequency at which to apply the filter.
+        """
         # Apply FFT to the audio signal
         fft_audio = fft(self.audio_data)
 
@@ -88,6 +115,14 @@ class Audio_Processor:
         self.audio_data = ifft(filtered_fft).real
 
     def high_pass_filter(self, cutoff_frequency):
+        """
+        Apply a high pass filter to the loaded audio
+        effectively isolating the high frequencies only.
+
+        Args:
+            cutoff_frequency (int): 
+                The frequency at which to apply the filter.
+        """
         # Apply FFT to the audio signal
         fft_audio = fft(self.audio_data)
 
@@ -104,8 +139,35 @@ class Audio_Processor:
         self.audio_data = ifft(filtered_fft).real
 
     def normalize_audio(self):
+        """
+        Normalize the loaded audio.
+        Typically apply this operation last.
+        """
         self.audio_data = np.array((np.abs(self.audio_data) / np.max(np.abs(self.audio_data))) * 32767, np.int16)
 
-    def boost_volume(self, boost):
-        self.audio_data = (self.audio_data.astype(np.float32) * boost).astype(np.int16)
+    def convolve(self, other):
+        """
+        Performs a convolutions between the data loaded in this 
+        audio processor and the 'other' audio processor. The 
+        result is stored in the calling processor.
+
+        Note: if the sample_rates of the two processors are 
+        mismatched, the sample_rate of the calling processor is 
+        utilized.
+
+        Note: This function automatically normalizes its result.
+
+        Args:
+            other (Audio_Processor):
+                The other processor, with loaded data to use.
+        """
+        audio_data = self.audio_data.astype(np.float64)
+        other_audio_data = resample(other.audio_data, int(len(other.audio_data) * self.sample_rate / other.sample_rate))
+        other_audio_data = other_audio_data.astype(np.float64)
+
+        audio_data /= np.max(np.abs(audio_data))
+        other_audio_data /= np.max(np.abs(other_audio_data))
         
+        convolution_result = convolve(audio_data, other_audio_data, mode='full')
+        convolution_result /= np.max(np.abs(convolution_result))
+        self.audio_data = (convolution_result.real * 32767).astype(np.int16)
