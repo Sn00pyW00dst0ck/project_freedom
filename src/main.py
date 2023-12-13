@@ -4,6 +4,7 @@ import numpy as np
 import imageio.v3 as iio
 
 from images.image_hybridizer import Image_Hybridizer
+from images.image_processor import Image_Processor
 from audio.audio_processor import Audio_Processor
 
 AUDIO_FILE_BASE = "./assets/audio/"
@@ -11,6 +12,7 @@ IMAGE_FILE_BASE = "./assets/images/"
 VIDEO_FILE_BASE = "./assets/videos/"
 
 audio_file_processor = Audio_Processor()
+image_file_processor = Image_Processor()
 
 if __name__ == "__main__":
     # Grayscale works.
@@ -18,26 +20,34 @@ if __name__ == "__main__":
     # TODO: Let's try for Video.
     # TODO: Let's write a really good explanation document.
 
-    Ethan_Hunt = iio.imread(IMAGE_FILE_BASE + "rgb_monroe.png")
-    James_Bond = iio.imread(IMAGE_FILE_BASE + "rgb_einstein.png")
+    image_file_processor.load_from_file(IMAGE_FILE_BASE + "rgb_einstein.png")
+    second_processor = Image_Processor()
+    second_processor.load_from_file(IMAGE_FILE_BASE + "rgb_monroe.png")
 
-    # Grab the channels of RGB Image
-    Ethan_R = Ethan_Hunt[:, :, 0]
-    Ethan_G = Ethan_Hunt[:, :, 1]
-    Ethan_B = Ethan_Hunt[:, :, 2]
+    image_file_processor.custom_hybridization(second_processor, 23, 14)
+    image_file_processor.save_to_file("combined_updated.png")
+    image_file_processor.display_image()
 
-    James_R = James_Bond[:, :, 0]
-    James_G = James_Bond[:, :, 1]
-    James_B = James_Bond[:, :, 2]
+    #Ethan_Hunt = iio.imread(IMAGE_FILE_BASE + "rgb_monroe.png")
+    #James_Bond = iio.imread(IMAGE_FILE_BASE + "rgb_einstein.png")
 
-    hybridizer = Image_Hybridizer()
+    ## Grab the channels of RGB Image
+    #Ethan_R = Ethan_Hunt[:, :, 0]
+    #Ethan_G = Ethan_Hunt[:, :, 1]
+    #Ethan_B = Ethan_Hunt[:, :, 2]
 
-    hybrid_r = hybridizer.hybridize_images(James_R, Ethan_R, 23, 14)
-    hybrid_g = hybridizer.hybridize_images(James_G, Ethan_G, 23, 14)
-    hybrid_b = hybridizer.hybridize_images(James_B, Ethan_B, 23, 14)
-    hybrid_image = np.dstack((hybrid_r, hybrid_g, hybrid_b))
+    #James_R = James_Bond[:, :, 0]
+    #James_G = James_Bond[:, :, 1]
+    #James_B = James_Bond[:, :, 2]
 
-    iio.imwrite("combined.png", hybrid_image.astype(np.uint8))
+    #hybridizer = Image_Hybridizer()
+
+    #hybrid_image = hybridizer.hybridize_images(James_Bond[:,:,0], Ethan_Hunt[:,:,0], 23, 14)
+    ## hybrid_g = hybridizer.hybridize_images(James_G, Ethan_G, 23, 14)
+    ## hybrid_b = hybridizer.hybridize_images(James_B, Ethan_B, 23, 14)
+    ## hybrid_image = np.dstack((hybrid_r, hybrid_g, hybrid_b))
+
+    #iio.imwrite("combined.png", hybrid_image.astype(np.uint8))
 
     print("Done modifying image!")
 
