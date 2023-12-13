@@ -5,17 +5,21 @@ import imageio.v3 as iio
 
 from images.image_hybridizer import Image_Hybridizer
 from audio.audio_processor import Audio_Processor
-from audio.audio_hybridizer import Audio_Hybridizer
+
+AUDIO_FILE_BASE = "./assets/audio/"
+IMAGE_FILE_BASE = "./assets/images/"
+VIDEO_FILE_BASE = "./assets/videos/"
+
+audio_file_processor = Audio_Processor()
 
 if __name__ == "__main__":
     # Grayscale works.
     # RGB kinda works.
     # TODO: Let's try for Video.
-    # TODO: Let's try for Music.
     # TODO: Let's write a really good explanation document.
 
-    Ethan_Hunt = iio.imread("rgb_monroe.png")
-    James_Bond = iio.imread("rgb_einstein.png")
+    Ethan_Hunt = iio.imread(IMAGE_FILE_BASE + "rgb_monroe.png")
+    James_Bond = iio.imread(IMAGE_FILE_BASE + "rgb_einstein.png")
 
     # Grab the channels of RGB Image
     Ethan_R = Ethan_Hunt[:, :, 0]
@@ -37,15 +41,12 @@ if __name__ == "__main__":
 
     print("Done modifying image!")
 
+    # Replace below with a loop for processing images & data
+
     processor1 = Audio_Processor()
-    processor1.load_from_file("dog bark dry.wav")
+    processor1.load_from_file(AUDIO_FILE_BASE + "dog_bark_dry.wav")
     processor2 = Audio_Processor()
-    processor2.load_from_file("space_oddity.wav")
-
-    print(processor1.audio_data)
-
-    processor1.audio_data = processor1.audio_data[:,0]
-    # processor2.audio_data = processor2.audio_data[:,0]
+    processor2.load_from_file(AUDIO_FILE_BASE + "concert_hall_ir.wav")
 
     processor1.convolve(processor2)
     processor1.save_to_file("cross_synth.wav")

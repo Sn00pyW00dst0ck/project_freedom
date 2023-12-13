@@ -85,7 +85,7 @@ class Audio_Processor:
 
         if current_length < target_length:
             padding_length = target_length - current_length
-            padding = np.zeros(padding_length)
+            padding = np.zeros((padding_length, self.audio_data.shape[1]))
             self.audio_data = np.concatenate([self.audio_data, padding])
         else:
             self.audio_data = self.audio_data[:target_length]
@@ -99,20 +99,20 @@ class Audio_Processor:
             cutoff_frequency (int): 
                 The frequency at which to apply the filter.
         """
-        # Apply FFT to the audio signal
-        fft_audio = fft(self.audio_data)
+        for channel in range(self.audio_data.shape[1]):
+            # Apply FFT to the audio signal
+            fft_audio = fft(self.audio_data[:, channel])
 
-        # Get the frequencies corresponding to each point in the FFT
-        frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+            # Get the frequencies corresponding to each point in the FFT
+            frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+            # Create a mask for frequencies above the cutoff
+            filter_mask = np.abs(frequencies) <= cutoff_frequency
 
-        # Create a mask for frequencies above the cutoff
-        filter_mask = np.abs(frequencies) <= cutoff_frequency
+            # Apply the mask to the FFT
+            filtered_fft = fft_audio * filter_mask
 
-        # Apply the mask to the FFT
-        filtered_fft = fft_audio * filter_mask
-
-        # Apply Inverse FFT to obtain the filtered audio signal
-        self.audio_data = ifft(filtered_fft).real
+            # Apply Inverse FFT to obtain the filtered audio signal
+            self.audio_data[:, channel] = ifft(filtered_fft).real
 
     def high_pass_filter(self, cutoff_frequency):
         """
@@ -123,20 +123,21 @@ class Audio_Processor:
             cutoff_frequency (int): 
                 The frequency at which to apply the filter.
         """
-        # Apply FFT to the audio signal
-        fft_audio = fft(self.audio_data)
+        for channel in range(self.audio_data.shape[1]):
+            # Apply FFT to the audio signal
+            fft_audio = fft(self.audio_data)
 
-        # Get the frequencies corresponding to each point in the FFT
-        frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
+            # Get the frequencies corresponding to each point in the FFT
+            frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
 
-        # Create a mask for frequencies above the cutoff
-        filter_mask = np.abs(frequencies) >= cutoff_frequency
+            # Create a mask for frequencies above the cutoff
+            filter_mask = np.abs(frequencies) >= cutoff_frequency
 
-        # Apply the mask to the FFT
-        filtered_fft = fft_audio * filter_mask
+            # Apply the mask to the FFT
+            filtered_fft = fft_audio * filter_mask
 
-        # Apply Inverse FFT to obtain the filtered audio signal
-        self.audio_data = ifft(filtered_fft).real
+            # Apply Inverse FFT to obtain the filtered audio signal
+            self.audio_data[:, channel] = ifft(filtered_fft).real
 
     def normalize_audio(self):
         """
@@ -171,3 +172,4 @@ class Audio_Processor:
         convolution_result = convolve(audio_data, other_audio_data, mode='full')
         convolution_result /= np.max(np.abs(convolution_result))
         self.audio_data = (convolution_result.real * 32767).astype(np.int16)
+
