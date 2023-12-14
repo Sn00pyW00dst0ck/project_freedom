@@ -7,14 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
       
       - name: Compile LaTeX Executive Summary
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@v2
         with:
           root_file: ./report/executive_summary.tex
       
       - name: Compile LaTeX Extended Report
-        uses: xu-cheng/latex-action@v3
+        uses: xu-cheng/latex-action@v2
         with:
           root_file: ./report/extended_report.tex
