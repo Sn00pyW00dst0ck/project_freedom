@@ -64,3 +64,22 @@ Currently, unit testing is minimal.
 1. Make a similar processor class for video files.
 2. Utilize machine learning to automatically detect the best methods to hybridize images and combine audio files.
 3. Improve the robustness of the unit tests.
+
+
+
+## Inspirations & Accredations:
+The following resources inspired this project:
+1. https://kryakin.site/am2/Stein-Shakarchi-1-Fourier_Analysis.pdf
+2. https://jeremykun.com/2014/09/29/hybrid-images/
+3. https://cmtext.indiana.edu/synthesis/chapter4_convolution.php#:~:text=Convolution%20is%20a%20method%20of,not%20share%20will%20be%20minimized.
+
+The following resources were utilized during the development of this project:
+1. https://pixabay.com/sound-effects/search/ir/
+2. https://www.pygame.org/docs/
+3. https://numpy.org/doc/stable/index.html
+4. https://docs.scipy.org/doc/scipy/reference/main_namespace.html
+5. https://ccrma.stanford.edu/~jos/st/Matrix_Formulation_DFT.html
+6. https://en.wikipedia.org/wiki/Parseval%27s_theorem
+7. https://users.metu.edu.tr/ccandan/pub_dir/Eig_Structure_DFT_IEEE_SPM_Column_March2011.pdf
+8. https://vanhunteradams.com/FFT/FFT.html#The-Cooley-Tukey-FFT
+9. https://faculty.washington.edu/seattle/physics541/%202010-Fourier-transforms/history-3.pdf
