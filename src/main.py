@@ -173,8 +173,6 @@ if __name__ == "__main__":
                         break
                     case _:
                         print("Shouldn't be here!")
-                        
-
 
         if choice == "images":
             # Load the initial file
@@ -219,7 +217,7 @@ if __name__ == "__main__":
                             "Where would you like to save the fourier transform?\n" +
                             "Enter file name: "
                         )
-                        image_file_processor.save_to_file(file_location)
+                        image_file_processor.save_fourier_transform_to_file(file_location)
                     case "5":
                         sigma_low = get_positive_integer_input(
                             "Enter the value of sigma to use in the low pass filter.\n" + 
