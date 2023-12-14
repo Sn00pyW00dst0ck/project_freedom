@@ -1,4 +1,4 @@
-# Project Freedom
+# Project Freedom : Merging Audio & Images With FFT
 
 ![Build Status](https://github.com/Sn00pyW00dst0ck/project_freedom/actions/workflows/pipeline.yml/badge.svg?event=push)
 ![Reports Build Status](https://github.com/Sn00pyW00dst0ck/project_freedom/actions/workflows/latex-build.yml/badge.svg?event=push)
