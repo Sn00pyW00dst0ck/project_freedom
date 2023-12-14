@@ -39,6 +39,17 @@ causing the program to crash.
 While this program *should* work on a Windows machine, it was developed for and tested on
 Linux in Python version 3.12 and that is the environment to expect best results for.
 
+## Some Sample Image Outputs
+
+Project Freedom was utilized to create the following visualizations image mergings and audio transformations. For more information about these mergings, see the [Extended Report](/report/extended_report.pdf).
+
+| ![Alt text](/assets/images/einstein.png)  | ![Alt text](/assets/images/monroe.png)  | ![Alt text](/samples/images/einstein_monroe.png)
+| ------------- | ------------- | ------------- |
+| ![Alt text](/assets/images/rgb_einstein.png)  | ![Alt text](/assets/images/rgb_monroe.png)  | ![Alt text](/samples/images/rgb_einstein_monroe.png)
+| ------------- | ------------- | ------------- |
+| ![Alt text](/samples/audio/dog_bark_dry_waveform.png)  | ![Alt text](/samples/audio/cave_ir_waveform.png) | ![Alt text](/samples/audio/dog_bark_dry_convolve_cave_waveform.png) | 
+
+
 ## To Setup For Development
 
 To setup for development, follow the same directions for installation listed above. 
