@@ -100,51 +100,58 @@ if __name__ == "__main__":
                 choice = get_valid_string_input(
                     "What would you like to do?\n\n" +
                     "1. Play current audio\n" + 
-                    "2. View current audio waveform\n" + 
-                    "3. Save current audio waveform\n" +
-                    "4. View current audio fourier transform\n" + 
-                    "5. Save current audio fourier transform\n" +
-                    "6. Apply low pass filter\n" +
-                    "7. Apply high pass filter\n" +
-                    "8. Convolve with another audio\n" +
-                    "9. Load a different audio\n" +
-                    "10. Return to main menu\n\n" +
+                    "2. Save current audio\n" +
+                    "3. View current audio waveform\n" + 
+                    "4. Save current audio waveform\n" +
+                    "5. View current audio fourier transform\n" + 
+                    "6. Save current audio fourier transform\n" +
+                    "7. Apply low pass filter\n" +
+                    "8. Apply high pass filter\n" +
+                    "9. Convolve with another audio\n" +
+                    "10. Load a different audio\n" +
+                    "11. Return to main menu\n\n" +
                     "Enter your choice: ",
-                    ["1","2","3","4","5","6","7","8","9","10"]
+                    ["1","2","3","4","5","6","7","8","9","10","11"]
                 )
 
                 match choice:
                     case "1":
                         audio_file_processor.play_data()
                     case "2":
-                        audio_file_processor.plot_waveform()
+                        file_location = get_string_input(
+                            "Where would you like to save the audio?\n" +
+                            "Enter file name: "
+                        )
+                        audio_file_processor.save_to_file(file_location)
                     case "3":
+                        audio_file_processor.plot_waveform()
+                    case "4":
                         file_location = get_string_input(
                             "Where would you like to save the waveform plot?\n" +
                             "Enter file name: "
                         )
                         audio_file_processor.save_waveform_to_file(file_location)
-                    case "4":
-                        audio_file_processor.plot_frequencies()
                     case "5":
+                        audio_file_processor.plot_frequencies()
+                    case "6":
                         file_location = get_string_input(
                             "Where would you like to save the fourier transform plot?\n" +
                             "Enter file name: "
                         )
                         audio_file_processor.save_frequencies_to_file(file_location)
-                    case "6":
+                    case "7":
                         cutoff = get_positive_integer_input(
                             "What is the highest frequency to keep?\n" +
                             "Enter frequency: "
                         )
                         audio_file_processor.low_pass_filter(cutoff)
-                    case "7":
+                    case "8":
                         cutoff = get_positive_integer_input(
                             "What is the lowest frequency to keep?\n" +
                             "Enter frequency: "
                         )
                         audio_file_processor.high_pass_filter(cutoff)
-                    case "8":
+                    case "9":
                         choice = get_string_input(
                             "What audio file would you like to convolve with?\n" +
                             "Enter audio file name: "
@@ -154,7 +161,7 @@ if __name__ == "__main__":
                         print("File successfully loaded, convolving audio...") 
                         audio_file_processor.convolve(temp_audio_processor)
                         print("Audio succesfully convolved.")
-                    case "9":
+                    case "10":
                         choice = get_string_input(
                             "What audio file would you like to use?\n" +
                             "Enter audio file name: "
@@ -162,7 +169,7 @@ if __name__ == "__main__":
                         print("Loading file: " + AUDIO_FILE_BASE + choice)
                         audio_file_processor.load_from_file(AUDIO_FILE_BASE + choice)
                         print("File successfully loaded.")
-                    case "10":
+                    case "11":
                         break
                     case _:
                         print("Shouldn't be here!")

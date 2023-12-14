@@ -215,7 +215,7 @@ class Audio_Processor:
         
         for channel in range(self.audio_data.shape[1]):
             # Apply FFT to the audio signal
-            fft_audio = fft(self.audio_data)
+            fft_audio = fft(self.audio_data[:, channel])
 
             # Get the frequencies corresponding to each point in the FFT
             frequencies = np.fft.fftfreq(len(fft_audio), d=1.0/self.sample_rate)
