@@ -5,7 +5,6 @@ from audio.audio_processor import Audio_Processor
 
 AUDIO_FILE_BASE = "./assets/audio/"
 IMAGE_FILE_BASE = "./assets/images/"
-VIDEO_FILE_BASE = "./assets/videos/"
 
 audio_file_processor = Audio_Processor()
 image_file_processor = Image_Processor()
@@ -100,51 +99,58 @@ if __name__ == "__main__":
                 choice = get_valid_string_input(
                     "What would you like to do?\n\n" +
                     "1. Play current audio\n" + 
-                    "2. View current audio waveform\n" + 
-                    "3. Save current audio waveform\n" +
-                    "4. View current audio fourier transform\n" + 
-                    "5. Save current audio fourier transform\n" +
-                    "6. Apply low pass filter\n" +
-                    "7. Apply high pass filter\n" +
-                    "8. Convolve with another audio\n" +
-                    "9. Load a different audio\n" +
-                    "10. Return to main menu\n\n" +
+                    "2. Save current audio\n" +
+                    "3. View current audio waveform\n" + 
+                    "4. Save current audio waveform\n" +
+                    "5. View current audio fourier transform\n" + 
+                    "6. Save current audio fourier transform\n" +
+                    "7. Apply low pass filter\n" +
+                    "8. Apply high pass filter\n" +
+                    "9. Convolve with another audio\n" +
+                    "10. Load a different audio\n" +
+                    "11. Return to main menu\n\n" +
                     "Enter your choice: ",
-                    ["1","2","3","4","5","6","7","8","9","10"]
+                    ["1","2","3","4","5","6","7","8","9","10","11"]
                 )
 
                 match choice:
                     case "1":
                         audio_file_processor.play_data()
                     case "2":
-                        audio_file_processor.plot_waveform()
+                        file_location = get_string_input(
+                            "Where would you like to save the audio?\n" +
+                            "Enter file name: "
+                        )
+                        audio_file_processor.save_to_file(file_location)
                     case "3":
+                        audio_file_processor.plot_waveform()
+                    case "4":
                         file_location = get_string_input(
                             "Where would you like to save the waveform plot?\n" +
                             "Enter file name: "
                         )
                         audio_file_processor.save_waveform_to_file(file_location)
-                    case "4":
-                        audio_file_processor.plot_frequencies()
                     case "5":
+                        audio_file_processor.plot_frequencies()
+                    case "6":
                         file_location = get_string_input(
                             "Where would you like to save the fourier transform plot?\n" +
                             "Enter file name: "
                         )
                         audio_file_processor.save_frequencies_to_file(file_location)
-                    case "6":
+                    case "7":
                         cutoff = get_positive_integer_input(
                             "What is the highest frequency to keep?\n" +
                             "Enter frequency: "
                         )
                         audio_file_processor.low_pass_filter(cutoff)
-                    case "7":
+                    case "8":
                         cutoff = get_positive_integer_input(
                             "What is the lowest frequency to keep?\n" +
                             "Enter frequency: "
                         )
                         audio_file_processor.high_pass_filter(cutoff)
-                    case "8":
+                    case "9":
                         choice = get_string_input(
                             "What audio file would you like to convolve with?\n" +
                             "Enter audio file name: "
@@ -154,7 +160,7 @@ if __name__ == "__main__":
                         print("File successfully loaded, convolving audio...") 
                         audio_file_processor.convolve(temp_audio_processor)
                         print("Audio succesfully convolved.")
-                    case "9":
+                    case "10":
                         choice = get_string_input(
                             "What audio file would you like to use?\n" +
                             "Enter audio file name: "
@@ -162,12 +168,10 @@ if __name__ == "__main__":
                         print("Loading file: " + AUDIO_FILE_BASE + choice)
                         audio_file_processor.load_from_file(AUDIO_FILE_BASE + choice)
                         print("File successfully loaded.")
-                    case "10":
+                    case "11":
                         break
                     case _:
                         print("Shouldn't be here!")
-                        
-
 
         if choice == "images":
             # Load the initial file
@@ -212,7 +216,7 @@ if __name__ == "__main__":
                             "Where would you like to save the fourier transform?\n" +
                             "Enter file name: "
                         )
-                        image_file_processor.save_to_file(file_location)
+                        image_file_processor.save_fourier_transform_to_file(file_location)
                     case "5":
                         sigma_low = get_positive_integer_input(
                             "Enter the value of sigma to use in the low pass filter.\n" + 
@@ -242,7 +246,7 @@ if __name__ == "__main__":
                             "Enter the value of sigma to use in the high pass filter.\n" + 
                             "Sigma: "
                         )
-                        image_file_processor.custom_hybridization(temp_image_processor, sigma_high, sigma_low) # 23, 14)
+                        image_file_processor.custom_hybridization(temp_image_processor, sigma_high, sigma_low)
                         print("Hybridization complete!")
                     case "8":
                         choice = get_string_input(
@@ -256,43 +260,3 @@ if __name__ == "__main__":
                         break
                     case _:
                         print("Shouldn't be here!")
-
-
-
-    # Grayscale works.
-    # RGB kinda works.
-    # Audio mods are working. 
-    # TODO: Let's try for Video.
-    # TODO: Let's write a really good explanation document.
-    image_file_processor.load_from_file(IMAGE_FILE_BASE + "einstein.png")
-    image_file_processor.plot_image()
-    image_file_processor.plot_fourier_transform()
-    image_file_processor.save_fourier_transform_to_file(IMAGE_FILE_BASE + "fourier.png")
-
-    image_file_processor.load_from_file(IMAGE_FILE_BASE + "rgb_einstein.png")
-    image_file_processor.plot_image()
-    second_processor = Image_Processor()
-    second_processor.load_from_file(IMAGE_FILE_BASE + "rgb_monroe.png")
-
-    image_file_processor.custom_hybridization(second_processor, 23, 14)
-    image_file_processor.save_to_file("combined_updated.png")
-    image_file_processor.plot_image()
-
-    print("Done modifying image!")
-
-    # Replace below with a loop for processing images & data
-
-    processor1 = Audio_Processor()
-    processor1.load_from_file(AUDIO_FILE_BASE + "dog_bark_dry.wav")
-    processor1.plot_waveform()
-    processor1.plot_frequencies()
-    processor2 = Audio_Processor()
-    processor2.load_from_file(AUDIO_FILE_BASE + "concert_hall_ir.wav")
-
-    processor1.convolve(processor2)
-    processor1.save_to_file("cross_synth.wav")
-    processor1.play_data()
-
-    print("Done modifying audio!")
-
-

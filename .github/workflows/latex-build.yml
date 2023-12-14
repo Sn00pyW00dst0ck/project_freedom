@@ -1,6 +1,6 @@
 # LaTeX build workflow, to ensure the PDF will build on any device.
 # Based on the marketplace action found here: https://github.com/marketplace/actions/github-action-for-latex
-name: Build LaTeX document
+name: Build LaTeX Docs
 on: [push]
 jobs:
   build_latex:
@@ -9,7 +9,14 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v3
       
-      - name: Compile LaTeX document
+      - name: Compile LaTeX Executive Summary
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: ./report/executive_summary.tex
+          root_file: executive_summary.tex
+          working_directory: ./report/
+      
+      - name: Compile LaTeX Extended Report
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: extended_report.tex
+          working_directory: ./report/
