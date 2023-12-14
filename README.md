@@ -43,9 +43,10 @@ Linux in Python version 3.12 and that is the environment to expect best results 
 
 Project Freedom was utilized to create the following visualizations image mergings and audio transformations. For more information about these mergings, see the [Extended Report](/report/extended_report.pdf).
 
-| ![Alt text](/assets/images/einstein.png)  | ![Alt text](/assets/images/monroe.png)  | ![Alt text](/samples/images/einstein_monroe.png)
+| ![Alt text](/assets/images/einstein.png)  | ![Alt text](/assets/images/monroe.png)  | ![Alt text](/samples/images/einstein_monroe.png) |
 | ------------- | ------------- | ------------- |
-| ![Alt text](/assets/images/rgb_einstein.png)  | ![Alt text](/assets/images/rgb_monroe.png)  | ![Alt text](/samples/images/rgb_einstein_monroe.png)
+| ![Alt text](/assets/images/rgb_einstein.png)  | ![Alt text](/assets/images/rgb_monroe.png)  | ![Alt text](/samples/images/rgb_einstein_monroe.png) |
+| ![Alt text](/assets/images/einstein.png)  | ![Alt text](/samples/images/einstein_low15.png)  | ![Alt text](/samples/images/einstein_high15.png) |
 | ![Alt text](/samples/audio/dog_bark_dry_waveform.png)  | ![Alt text](/samples/audio/cave_ir_waveform.png) | ![Alt text](/samples/audio/dog_bark_dry_convolve_cave_waveform.png) | 
 
 
@@ -60,9 +61,10 @@ Currently, unit testing is minimal.
 
 ### Potential Development Opportunities
 
-1. Make a similar processor class for video files.
-2. Utilize machine learning to automatically detect the best methods to hybridize images and combine audio files.
-3. Improve the robustness of the unit tests.
+1. Make a similar processor class for video files, potentially with an application for hybridizing them similar to images.
+2. It may be possible to create a hybridizer for audio files similar to the one for the images, though my testing was unsuccessful on this front.
+3. Utilize machine learning to automatically detect the best methods to hybridize images and combine audio files.
+4. Improve the robustness of the unit tests.
 
 
 
