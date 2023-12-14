@@ -8,3 +8,4 @@ report/*.log
 report/*.synctex.gz
 report/*.synctex*
 report/*.toc
+report/*.out
