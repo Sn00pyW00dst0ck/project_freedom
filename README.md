@@ -46,7 +46,6 @@ Project Freedom was utilized to create the following visualizations image mergin
 | ![Alt text](/assets/images/einstein.png)  | ![Alt text](/assets/images/monroe.png)  | ![Alt text](/samples/images/einstein_monroe.png)
 | ------------- | ------------- | ------------- |
 | ![Alt text](/assets/images/rgb_einstein.png)  | ![Alt text](/assets/images/rgb_monroe.png)  | ![Alt text](/samples/images/rgb_einstein_monroe.png)
-| ------------- | ------------- | ------------- |
 | ![Alt text](/samples/audio/dog_bark_dry_waveform.png)  | ![Alt text](/samples/audio/cave_ir_waveform.png) | ![Alt text](/samples/audio/dog_bark_dry_convolve_cave_waveform.png) | 
 
 
