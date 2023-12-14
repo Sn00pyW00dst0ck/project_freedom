@@ -5,7 +5,6 @@ from audio.audio_processor import Audio_Processor
 
 AUDIO_FILE_BASE = "./assets/audio/"
 IMAGE_FILE_BASE = "./assets/images/"
-VIDEO_FILE_BASE = "./assets/videos/"
 
 audio_file_processor = Audio_Processor()
 image_file_processor = Image_Processor()
